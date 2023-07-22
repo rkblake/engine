@@ -6,7 +6,33 @@ extern "C" {
 }
 #include "raylib.h"
 #include <cstdio>
+#include <functional>
+#include <optional>
 #include <stdio.h>
+
+using namespace std;
+
+optional<char *> get_str_safe(const char *name, lua_State *L) {
+    lua_getglobal(L, name);
+    if (!lua_isstring(L, -1)) {
+        fprintf(stderr, "ERROR: in settings.lua %s should be string\n", name);
+        return {};
+    }
+    char *ret = (char *)lua_tostring(L, -1);
+    lua_pop(L, -1);
+    return {ret};
+}
+
+optional<int> get_int_safe(const char *name, lua_State *L) {
+    lua_getglobal(L, name);
+    if (!lua_isnumber(L, -1)) {
+        fprintf(stderr, "ERROR: in settings.lua %s should be number\n", name);
+        return {};
+    }
+    int ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, -1);
+    return {ret};
+}
 
 int main(int argc, char **argv) {
     if (argc != 2) {
@@ -15,35 +41,23 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    lua_State *settings_file = luaL_newstate();
+    lua_State *settings = luaL_newstate();
 
-    if (luaL_loadfile(settings_file, argv[1]) ||
-        lua_pcall(settings_file, 0, 0, 0))
+    if (luaL_loadfile(settings, argv[1]) || lua_pcall(settings, 0, 0, 0))
         fprintf(stderr, "Failed to open lua file\n");
 
-    lua_getglobal(settings_file, "title");
-    lua_getglobal(settings_file, "width");
-    lua_getglobal(settings_file, "height");
-    lua_getglobal(settings_file, "fps_target");
+    auto title = get_str_safe("title", settings);
+    auto screen_width = get_int_safe("width", settings);
+    auto screen_height = get_int_safe("height", settings);
+    auto fps_target = get_int_safe("fps_target", settings);
 
-    if (!lua_isstring(settings_file, -4))
-        fprintf(stderr, "title should be a string\n");
-    if (!lua_isnumber(settings_file, -3))
-        fprintf(stderr, "width should be a number\n");
-    if (!lua_isnumber(settings_file, -2))
-        fprintf(stderr, "height should be a number\n");
-    if (!lua_isnumber(settings_file, -1))
-        fprintf(stderr, "fps_target should be a number\n");
+    if (!title || !screen_width || !screen_height || !fps_target)
+        return -1;
 
-    int screen_width = (int)lua_tonumber(settings_file, -3);
-    int screen_height = (int)lua_tonumber(settings_file, -2);
-    int fps_target = (int)lua_tonumber(settings_file, -1);
-    char *title = (char *)lua_tostring(settings_file, -4);
+    SetTraceLogLevel(LOG_ALL);
+    InitWindow(800, 600, "test");
 
-    SetTraceLogLevel(LOG_WARNING | LOG_ERROR);
-    InitWindow(screen_width, screen_height, title);
-
-    SetTargetFPS(fps_target);
+    SetTargetFPS(*fps_target);
 
     while (!WindowShouldClose()) {
         BeginDrawing();

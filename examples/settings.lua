@@ -1,4 +1,4 @@
-width = 1200
+width = 800
 height = 600
 fps_target = 60
 title = "example game"
