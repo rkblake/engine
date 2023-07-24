@@ -54,8 +54,8 @@ int main(int argc, char **argv) {
     if (!title || !screen_width || !screen_height || !fps_target)
         return -1;
 
-    SetTraceLogLevel(LOG_ALL);
-    InitWindow(800, 600, "test");
+    SetTraceLogLevel(LOG_ERROR | LOG_WARNING);
+    InitWindow(*screen_width, *screen_height, *title);
 
     SetTargetFPS(*fps_target);
 
