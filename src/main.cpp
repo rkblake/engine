@@ -2,6 +2,7 @@
 #include <optional>
 #include <raylib.h>
 #include <stdio.h>
+#include <string>
 
 #include "lua/lua_engine.hpp"
 
@@ -10,7 +11,7 @@ using namespace std;
 int main(int argc, char **argv) {
     if (argc != 2) {
         fprintf(stderr, "engine: missing arguments\n");
-        fprintf(stderr, "usage: engine settings.lua\n");
+        fprintf(stderr, "usage: engine path/to/settings.lua\n");
         return -1;
     }
 
@@ -20,6 +21,13 @@ int main(int argc, char **argv) {
     auto screen_width = lua::get_int_safe("width", settings);
     auto screen_height = lua::get_int_safe("height", settings);
     auto fps_target = lua::get_int_safe("fps_target", settings);
+    auto main_scene = lua::get_str_safe("main_scene", settings);
+
+    const string settings_path = string(argv[1]);
+    const string main_scene_path = // TODO: test if path works if it has no '/'
+        settings_path.substr(0, settings_path.find_last_of('/')) + "/" +
+        string(*main_scene);
+    printf("%s\n", main_scene_path.c_str());
 
     if (!title || !screen_width || !screen_height || !fps_target)
         return -1;

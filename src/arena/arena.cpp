@@ -17,3 +17,4 @@ void *Arena::alloc(size_t bytes) { return allocator->alloc(bytes); }
 void Arena::free(void *ptr) {}
 
 void *StackAllocator::alloc(size_t bytes) {}
+void StackAllocator::free(void *ptr) {}
