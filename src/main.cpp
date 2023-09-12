@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     const string main_scene_path = // TODO: test if path works if it has no '/'
         settings_path.substr(0, settings_path.find_last_of('/')) + "/" +
         string(*main_scene);
-    printf("%s\n", main_scene_path.c_str());
+    printf("[Engine] Running %s\n", main_scene_path.c_str());
 
     if (!title || !screen_width || !screen_height || !fps_target)
         return -1;

@@ -33,14 +33,15 @@ static int is_key_down(lua_State *L) {
     return 1;
 }
 
-static const struct luaL_Reg raylib[]{{"draw_text", draw_text},
-                                      {"draw_rect", draw_rect},
-                                      {"is_key_down", is_key_down},
-                                      {NULL, NULL}};
+static const struct luaL_Reg raylib[]{
+    {"draw_text", draw_text},
+    {"draw_rect", draw_rect},
+    {"is_key_down", is_key_down},
+};
 
 static int luaopen_raylib(lua_State *L) {
     for (auto lib : raylib) {
-        luaL_requiref(L, lib.name, lib.func, 1);
+        lua_register(L, lib.name, lib.func);
     }
     return 1;
 }
