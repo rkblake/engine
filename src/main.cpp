@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
     }
 
     lua_State *settings = lua::lua_openfile(argv[1]);
+    printf("[Engine] Opened %s\n", argv[1]);
 
     auto title = lua::get_str_safe("title", settings);
     auto screen_width = lua::get_int_safe("width", settings);
@@ -34,6 +35,7 @@ int main(int argc, char **argv) {
 
     SetTraceLogLevel(LOG_ERROR | LOG_WARNING);
     InitWindow(*screen_width, *screen_height, *title);
+    printf("[Engine] Started %dx%d window\n", *screen_width, *screen_height);
 
     SetTargetFPS(*fps_target);
 
@@ -46,6 +48,7 @@ int main(int argc, char **argv) {
     }
 
     CloseWindow();
+    printf("[Engine] Closing\n");
 
     return 0;
 }

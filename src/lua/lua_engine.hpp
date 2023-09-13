@@ -43,4 +43,9 @@ static std::optional<int> get_int_safe(const char *name, lua_State *L) {
     return {ret};
 }
 
+static void call_lua_function(const char *name, lua_State *L) {
+    lua_getglobal(L, name);
+    lua_call(L, 0, 0);
+}
+
 } // namespace lua
