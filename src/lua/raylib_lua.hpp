@@ -8,7 +8,7 @@ static int draw_text(lua_State *L) {
     const int x = luaL_checkinteger(L, 2);
     const int y = luaL_checkinteger(L, 3);
 
-    DrawText(text, x, y, 10, RAYWHITE);
+    DrawText(text, x, y, 10, GetColor(0x000000));
 
     return 0;
 }
@@ -19,7 +19,7 @@ static int draw_rect(lua_State *L) {
     const int width = luaL_checkinteger(L, 3);
     const int height = luaL_checkinteger(L, 4);
 
-    DrawRectangle(x, y, width, height, RAYWHITE);
+    DrawRectangle(x, y, width, height, BLACK);
 
     return 0;
 }

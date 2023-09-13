@@ -14,8 +14,10 @@ namespace lua {
 static lua_State *lua_openfile(const char *filename) {
     lua_State *L = luaL_newstate();
 
-    if (luaL_loadfile(L, filename) || lua_pcall(L, 0, 0, 0))
-        fprintf(stderr, "Failed to open lua file\n");
+    if (luaL_loadfile(L, filename) || lua_pcall(L, 0, 0, 0)) {
+        fprintf(stderr, "Failed to open lua file: %s\n", filename);
+        exit(-1);
+    }
 
     luaopen_raylib(L);
     return L;

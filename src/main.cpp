@@ -22,12 +22,13 @@ int main(int argc, char **argv) {
     auto screen_width = lua::get_int_safe("width", settings);
     auto screen_height = lua::get_int_safe("height", settings);
     auto fps_target = lua::get_int_safe("fps_target", settings);
-    auto main_scene = lua::get_str_safe("main_scene", settings);
+    auto main_scene_file = lua::get_str_safe("main_scene", settings);
 
     const string settings_path = string(argv[1]);
     const string main_scene_path = // TODO: test if path works if it has no '/'
         settings_path.substr(0, settings_path.find_last_of('/')) + "/" +
-        string(*main_scene);
+        string(*main_scene_file);
+    lua_State *main_scene = lua::lua_openfile(main_scene_path.c_str());
     printf("[Engine] Running %s\n", main_scene_path.c_str());
 
     if (!title || !screen_width || !screen_height || !fps_target)
@@ -43,6 +44,8 @@ int main(int argc, char **argv) {
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
+
+        lua::call_lua_function("update", main_scene);
 
         EndDrawing();
     }
