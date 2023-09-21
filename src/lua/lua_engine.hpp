@@ -50,4 +50,38 @@ static void call_lua_function(const char *name, lua_State *L) {
     lua_call(L, 0, 0);
 }
 
+void lua_print_stack(lua_State *L) {
+    int top = lua_gettop(L);
+
+    // const char *str = "From top to bottom, the lua stack is \n";
+    printf("==============================================\n");
+    printf("Printing Lua Stack\n");
+    for (unsigned index = top; index > 0; index--) {
+        printf("%3d: ", index);
+        int type = lua_type(L, index);
+        switch (type) {
+        // booleans
+        case LUA_TBOOLEAN:
+            printf("%s\n", (lua_toboolean(L, index) ? "true" : "false"));
+            break;
+
+        // numbers
+        case LUA_TNUMBER:
+            printf("%f\n", lua_tonumber(L, index));
+            break;
+
+        // strings
+        case LUA_TSTRING:
+            printf("%s\n", lua_tostring(L, index));
+            break;
+
+        // other
+        default:
+            printf("%s\n", lua_typename(L, type));
+            break;
+        }
+    }
+    printf("==============================================\n");
+}
+
 } // namespace lua

@@ -5,43 +5,51 @@
 namespace memory {
 
 class Allocator {
-  protected:
+protected:
     size_t size;
 
-  public:
+public:
     Allocator(size_t size) {}
     ~Allocator() {}
-    virtual void *alloc(size_t bytes) = 0;
+    virtual unsigned int malloc(size_t bytes) = 0;
+    // virtual unsigned int calloc(size_t bytes) = 0;
     virtual void free(void *ptr) = 0;
+    // virtual void clear() = 0;
 };
 
 class StackAllocator : public Allocator {
-  private:
+private:
     size_t top;
 
-  public:
-    void *alloc(size_t bytes);
-    void free(void *ptr);
+public:
+    unsigned int malloc(size_t bytes);
+    // unsigned int calloc(size_t bytes);
+    // void free(void *ptr);
+    // void clear();
 };
 
 class BuddyAllocator : public Allocator {
-  public:
-    void *alloc(size_t bytes);
-    void free(void *ptr);
+public:
+    unsigned int malloc(size_t bytes);
+    // unsigned int calloc(size_t bytes);
+    // void free(void *ptr);
+    // void clear();
 };
 
 class Arena {
-  private:
-    void *data;
+private:
+    size_t *data;
     size_t reserved;
     Allocator *allocator;
 
-  public:
+public:
     Arena(Allocator *allocator, size_t initial_size);
     ~Arena();
 
-    void *alloc(size_t bytes);
-    void free(void *ptr);
+    void *malloc(size_t bytes);
+    // void *calloc(size_t bytes);
+    void free(void *ptr, size_t bytes);
+    // void clear();
 };
 
 } // namespace memory
