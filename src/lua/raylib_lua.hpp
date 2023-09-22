@@ -33,10 +33,19 @@ static int is_key_down(lua_State *L) {
     return 1;
 }
 
+static int get_delta(lua_State *L) {
+    const float delta = GetFrameTime();
+
+    lua_pushnumber(L, delta);
+
+    return 1;
+}
+
 static const struct luaL_Reg raylib[]{
     {"draw_text", draw_text},
     {"draw_rect", draw_rect},
     {"is_key_down", is_key_down},
+    {"get_delta", get_delta},
 };
 
 static int luaopen_raylib(lua_State *L) {

@@ -1,7 +1,13 @@
 speed = 20
+xpos = 10
+ypos = 10
 
 function ready()
+    
+end
 
+function update(self, delta)
+    draw_rect(xpos, ypos, 25, 200)
 end
 
 function input(self, event)

@@ -5,6 +5,7 @@
 #include <string>
 
 #include "lua/lua_engine.hpp"
+#include "memory/memory.hpp"
 
 using namespace std;
 
@@ -40,6 +41,9 @@ int main(int argc, char **argv) {
 
     SetTargetFPS(*fps_target);
 
+    lua_close(settings);
+
+    unsigned long long frame_counter = 0;
     while (!WindowShouldClose()) {
         BeginDrawing();
 
@@ -48,9 +52,12 @@ int main(int argc, char **argv) {
         lua::call_lua_function("update", main_scene);
 
         EndDrawing();
+        frame_counter++;
     }
 
     CloseWindow();
+    lua_close(main_scene);
+    printf("[Engine] %lld frames drawn\n", frame_counter);
     printf("[Engine] Closing\n");
 
     return 0;

@@ -13,5 +13,6 @@ struct Scene {
 
 // void spawn(char *lua_file);
 // void spawn_at(char *lua_file, float x, float y);
-// void add_gameobject();
+void add_gameobject();
+Scene &get_current_scene();
 // void add_component();
